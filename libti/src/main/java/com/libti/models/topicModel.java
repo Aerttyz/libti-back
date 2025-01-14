@@ -11,9 +11,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "books")
-public class bookModel {
-
+@Table(name = "topic")
+public class topicModel {
+  
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -22,20 +22,16 @@ public class bookModel {
     @NotNull
     private String title;
 
-    private String author;
-
-    private String edition;
-
-    private String publisher;
-
-    private String isbn;
-
-    private String yearPublication;
-
     @NotNull
-    private String link;
+    private String content;
 
-    @NotNull
-    @Column(columnDefinition = "BLOB")
-    private byte[] cover;
+    private UUID author;
+
+    private int avaliations;
+
+    private String[] comments;
+
+    private UUID commentOwner;
+
+    private int reports;
 }
