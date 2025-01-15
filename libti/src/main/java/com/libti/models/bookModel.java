@@ -110,6 +110,6 @@ public class bookModel {
 
     @NotNull
     @Column(columnDefinition = "BLOB")
-    @Lob
+    @Lob    
     private byte[] cover;
 }
