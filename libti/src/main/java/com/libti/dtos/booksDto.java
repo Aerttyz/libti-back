@@ -1,26 +1,7 @@
-package com.libti.models;
+package com.libti.dtos;
 
-import java.util.UUID;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-
-@Entity
-@Table(name = "books")
-public class bookModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private UUID id;
-
-    @NotNull
+public class booksDto {
+    
     private String title;
 
     private String author;
@@ -33,12 +14,38 @@ public class bookModel {
 
     private String yearPublication;
 
-    public UUID getId() {
-        return id;
+    private String link;
+
+    private byte[] cover;
+
+    public booksDto() {
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public booksDto(String title, String author, String edition, String publisher, String isbn, String yearPublication, String link, byte[] cover) {
+        this.title = title;
+        this.author = author;
+        this.edition = edition;
+        this.publisher = publisher;
+        this.isbn = isbn;
+        this.yearPublication = yearPublication;
+        this.link = link;
+        this.cover = cover;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public byte[] getCover() {
+        return cover;
+    }
+
+    public void setCover(byte[] cover) {
+        this.cover = cover;
     }
 
     public String getTitle() {
@@ -89,27 +96,4 @@ public class bookModel {
         this.yearPublication = yearPublication;
     }
 
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public byte[] getCover() {
-        return cover;
-    }
-
-    public void setCover(byte[] cover) {
-        this.cover = cover;
-    }
-
-    @NotNull
-    private String link;
-
-    @NotNull
-    @Column(columnDefinition = "BLOB")
-    @Lob
-    private byte[] cover;
 }
