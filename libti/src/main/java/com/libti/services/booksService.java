@@ -1,12 +1,12 @@
 package com.libti.services;
 
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.libti.models.bookModel;
 import com.libti.repositories.booksRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -17,16 +17,13 @@ public class booksService {
 
     @Transactional
     public void save(com.libti.dtos.booksDto booksDto) {
-
         try {
-
-        
-
             bookModel bookModel = new bookModel();
             try {
                 String sanitizedInput = new String(booksDto.getCover()).replaceAll("\\s+", "");
-                byte[] decodedCover = Base64.getDecoder().decode(sanitizedInput); 
+                byte[] decodedCover = Base64.getDecoder().decode(sanitizedInput);
                 bookModel.setCover(decodedCover);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -37,13 +34,28 @@ public class booksService {
             bookModel.setIsbn(booksDto.getIsbn());
             bookModel.setLink(booksDto.getLink());
             bookModel.setYearPublication(booksDto.getYearPublication());
-            
-
             booksRepository.save(bookModel);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public List<bookModel> getBook() {
+        try {
+            List<bookModel> books = booksRepository.findAll();
+            return books;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    public List<bookModel> getBookByTitle(String title) {
+        try {
+            List<bookModel> books = booksRepository.findByTitleContainingIgnoreCase(title);
+            return books;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
