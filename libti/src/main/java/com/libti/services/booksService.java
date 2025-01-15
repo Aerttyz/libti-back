@@ -7,12 +7,15 @@ import org.springframework.stereotype.Service;
 import com.libti.models.bookModel;
 import com.libti.repositories.booksRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class booksService {
 
     @Autowired
     private booksRepository booksRepository;
 
+    @Transactional
     public void save(com.libti.dtos.booksDto booksDto) {
 
         try {
@@ -21,7 +24,8 @@ public class booksService {
 
             bookModel bookModel = new bookModel();
             try {
-                byte[] decodedCover = Base64.getDecoder().decode(booksDto.getCover());
+                String sanitizedInput = new String(booksDto.getCover()).replaceAll("\\s+", "");
+                byte[] decodedCover = Base64.getDecoder().decode(sanitizedInput); 
                 bookModel.setCover(decodedCover);
             } catch (Exception e) {
                 e.printStackTrace();
