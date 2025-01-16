@@ -39,8 +39,10 @@ public class UserService{
     }
 
     public void update(UserDto user){
-        String Token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        UUID userId = jwtUtils.getIdFromToken(Token);
+        System.out.println("Autenticação no método update: " + SecurityContextHolder.getContext().getAuthentication());
+        String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        System.out.println("Token recebido: " + token);
+        UUID userId = jwtUtils.getIdFromToken(token);
 
         UserModel userModel = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

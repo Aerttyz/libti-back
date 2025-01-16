@@ -18,6 +18,9 @@ public class UserDto {
        BeanUtils.copyProperties(userModel, this);
     }
 
+    public UserDto() {
+    }
+
     public String getName() {
         return name;
     }

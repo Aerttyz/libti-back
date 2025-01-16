@@ -28,6 +28,7 @@ public class AuthFilterToken extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+                System.out.println("Filtro executado para a URL: " + request.getRequestURI());
         try {
             String jwt = getToken(request);
             if(jwt != null && jwtUtil.validateToken(jwt)){
@@ -36,7 +37,7 @@ public class AuthFilterToken extends OncePerRequestFilter{
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, jwt, userDetails.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
@@ -51,6 +52,7 @@ public class AuthFilterToken extends OncePerRequestFilter{
     
     private String getToken(HttpServletRequest request) {
         String headerToken = request.getHeader("Authorization");
+        System.out.println("Header Authorization recebido:: " + headerToken);
         if (StringUtils.hasText(headerToken) && headerToken.startsWith("Bearer ")) {
             return headerToken.replace("Bearer ", "");
         }

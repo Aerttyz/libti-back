@@ -77,6 +77,7 @@ public class JwtUtils {
     }
     public UUID getIdFromToken(String token) {
         Claims claims = getClaims(token);
-        return claims.get("id", UUID.class);
+        String idString = claims.get("id", String.class);
+        return UUID.fromString(idString);
     }
 }
