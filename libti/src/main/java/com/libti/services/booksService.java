@@ -5,20 +5,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.libti.models.bookModel;
-import com.libti.repositories.booksRepository;
+import com.libti.models.BookModel;
+import com.libti.repositories.BooksRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class booksService {
+public class BooksService {
 
     @Autowired
-    private booksRepository booksRepository;
+    private BooksRepository booksRepository;
 
     @Transactional
-    public void save(com.libti.dtos.booksDto booksDto) {
+    public void save(com.libti.dtos.BooksDto booksDto) {
         try {
-            bookModel bookModel = new bookModel();
+            BookModel bookModel = new BookModel();
             try {
                 String sanitizedInput = new String(booksDto.getCover()).replaceAll("\\s+", "");
                 byte[] decodedCover = Base64.getDecoder().decode(sanitizedInput);
@@ -39,9 +39,9 @@ public class booksService {
             e.printStackTrace();
         }
     }
-    public List<bookModel> getBook() {
+    public List<BookModel> getBook() {
         try {
-            List<bookModel> books = booksRepository.findAll();
+            List<BookModel> books = booksRepository.findAll();
             return books;
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,9 +49,9 @@ public class booksService {
         }
     }
 
-    public List<bookModel> getBookByTitle(String title) {
+    public List<BookModel> getBookByTitle(String title) {
         try {
-            List<bookModel> books = booksRepository.findByTitleContainingIgnoreCase(title);
+            List<BookModel> books = booksRepository.findByTitleContainingIgnoreCase(title);
             return books;
         } catch (Exception e) {
             e.printStackTrace();

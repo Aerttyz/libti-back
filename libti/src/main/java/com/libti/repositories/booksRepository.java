@@ -6,11 +6,11 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.libti.models.bookModel;
+import com.libti.models.BookModel;
 
 @Repository
-public interface booksRepository extends JpaRepository<bookModel, UUID> {
+public interface BooksRepository extends JpaRepository<BookModel, UUID> {
     
-    List<bookModel> findByTitleContainingIgnoreCase(String title);
+    List<BookModel> findByTitleContainingIgnoreCase(String title);
 
 }

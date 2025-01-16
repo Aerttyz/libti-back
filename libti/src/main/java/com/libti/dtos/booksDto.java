@@ -1,6 +1,6 @@
 package com.libti.dtos;
 
-public class booksDto {
+public class BooksDto {
     
     private String title;
 
@@ -18,10 +18,10 @@ public class booksDto {
 
     private byte[] cover;
 
-    public booksDto() {
+    public BooksDto() {
     }
 
-    public booksDto(String title, String author, String edition, String publisher, String isbn, String yearPublication, String link, byte[] cover) {
+    public BooksDto(String title, String author, String edition, String publisher, String isbn, String yearPublication, String link, byte[] cover) {
         this.title = title;
         this.author = author;
         this.edition = edition;

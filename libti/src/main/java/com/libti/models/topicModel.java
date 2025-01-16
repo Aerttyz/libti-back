@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "topic")
-public class topicModel {
+public class TopicModel {
   
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
