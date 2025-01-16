@@ -10,4 +10,5 @@ import com.libti.models.UserModel;
 public interface UserRepository extends JpaRepository<UserModel, UUID> {
     
     Optional<UserModel> findByEmail(String email);
+
 }

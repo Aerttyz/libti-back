@@ -69,4 +69,8 @@ public class UserDetailsImpls implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }

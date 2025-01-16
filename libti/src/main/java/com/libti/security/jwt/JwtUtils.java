@@ -2,6 +2,9 @@ package com.libti.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.libti.services.UserDetailsImpls;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -28,7 +32,11 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateTokenFromUserDetailsImpl(UserDetailsImpls UserDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", UserDetails.getId());
+        
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject((UserDetails.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
@@ -46,7 +54,9 @@ public class JwtUtils {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(authToken);
+            Claims claims = 
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(authToken).getBody();
+            System.out.println("Claims: "+claims);
             return true;
         } catch (ExpiredJwtException e) {
             e.printStackTrace();
@@ -58,5 +68,15 @@ public class JwtUtils {
             e.printStackTrace();
         } 
         return false;
+    }
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build().parseClaimsJws(token)
+                    .getBody();
+    }
+    public UUID getIdFromToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("id", UUID.class);
     }
 }
