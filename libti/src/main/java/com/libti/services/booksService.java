@@ -19,14 +19,7 @@ public class BooksService {
     public void save(com.libti.dtos.BooksDto booksDto) {
         try {
             BookModel bookModel = new BookModel();
-            try {
-                String sanitizedInput = new String(booksDto.getCover()).replaceAll("\\s+", "");
-                byte[] decodedCover = Base64.getDecoder().decode(sanitizedInput);
-                bookModel.setCover(decodedCover);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            bookModel.setCover(booksDto.getCover());
             bookModel.setTitle(booksDto.getTitle());
             bookModel.setAuthor(booksDto.getAuthor());
             bookModel.setEdition(booksDto.getEdition());

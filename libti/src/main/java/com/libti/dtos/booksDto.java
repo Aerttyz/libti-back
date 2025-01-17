@@ -16,12 +16,12 @@ public class BooksDto {
 
     private String link;
 
-    private byte[] cover;
+    private String cover;
 
     public BooksDto() {
     }
 
-    public BooksDto(String title, String author, String edition, String publisher, String isbn, String yearPublication, String link, byte[] cover) {
+    public BooksDto(String title, String author, String edition, String publisher, String isbn, String yearPublication, String link, String cover) {
         this.title = title;
         this.author = author;
         this.edition = edition;
@@ -40,11 +40,11 @@ public class BooksDto {
         this.link = link;
     }
 
-    public byte[] getCover() {
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(byte[] cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 

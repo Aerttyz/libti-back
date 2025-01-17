@@ -32,6 +32,12 @@ public class BookModel {
     private String isbn;
 
     private String yearPublication;
+    
+    @NotNull
+    private String link;
+
+    @NotNull   
+    private String cover;
 
     public UUID getId() {
         return id;
@@ -97,19 +103,12 @@ public class BookModel {
         this.link = link;
     }
 
-    public byte[] getCover() {
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(byte[] cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 
-    @NotNull
-    private String link;
-
-    @NotNull
-    @Column(columnDefinition = "BLOB")
-    @Lob    
-    private byte[] cover;
 }

@@ -1,5 +1,9 @@
 package com.libti.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.libti.repositories.UserRepository;
 
 import com.libti.dtos.UserDto;
@@ -39,7 +45,7 @@ public class UserService {
         return new UserDto(userModel);
     }
 
-    public void update(UserDto user) {
+    public void update(UserDto user, MultipartFile profilePicture) {
         System.out.println("Autenticação no método update: " + SecurityContextHolder.getContext().getAuthentication());
         String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
         System.out.println("Token recebido: " + token);
@@ -51,7 +57,26 @@ public class UserService {
         userModel.setName(user.getName());
         userModel.setEmail(user.getEmail());
         userModel.setPassword(passwordEncoder.encode(user.getPassword()));
-        userModel.setProfilePicture(user.getProfilePicture());
+
+        if (profilePicture != null && !profilePicture.isEmpty()) {
+            try {
+                String uploadDir = "./uploads/";
+                String fileName = UUID.randomUUID() + "_" + profilePicture.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir + fileName);
+
+                // Cria o diretório se ele não existir
+                Files.createDirectories(filePath.getParent());
+
+                // Salva o arquivo no sistema de arquivos
+                Files.write(filePath, profilePicture.getBytes());
+
+                // Atualiza o caminho da imagem no banco
+                userModel.setProfilePicture("/uploads/" + fileName);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao salvar a imagem: " + e.getMessage());
+            }
+        }
+
         userRepository.save(userModel);
 
     }

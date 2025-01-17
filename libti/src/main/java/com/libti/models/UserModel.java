@@ -34,7 +34,6 @@ public class UserModel {
     private String password;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
     private String profilePicture;
 
     public UserModel() {
