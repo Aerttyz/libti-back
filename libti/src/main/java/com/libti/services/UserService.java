@@ -3,7 +3,6 @@ package com.libti.services;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,29 +15,31 @@ import com.libti.models.UserModel;
 import com.libti.security.jwt.JwtUtils;
 
 @Service
-public class UserService{
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-	private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtUtils jwtUtils;
 
-    public List<UserDto> listUsers(){
+    public List<UserDto> listUsers() {
         List<UserModel> users = userRepository.findAll();
         return users.stream().map(UserDto::new).toList();
     }
 
-    public void insert(UserDto user){
-        UserModel userModel = new UserModel();
-        userModel.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(userModel);
+    public UserDto getUser() {
+        String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        UUID userId = jwtUtils.getIdFromToken(token);
+        UserModel userModel = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return new UserDto(userModel);
     }
 
-    public void update(UserDto user){
+    public void update(UserDto user) {
         System.out.println("Autenticação no método update: " + SecurityContextHolder.getContext().getAuthentication());
         String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
         System.out.println("Token recebido: " + token);
@@ -46,20 +47,33 @@ public class UserService{
 
         UserModel userModel = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        
+
         userModel.setName(user.getName());
         userModel.setEmail(user.getEmail());
         userModel.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        try{
-            String sanitizedInput = new String(user.getProfilePicture()).replaceAll("\\s+", "");
-            byte[] decodedCover = Base64.getDecoder().decode(sanitizedInput);
-            userModel.setProfilePicture(decodedCover);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        userModel.setProfilePicture(user.getProfilePicture());
         userRepository.save(userModel);
+
+    }
+
+    public boolean isValidBase64(String base64) {
+        try {
+            Base64.getDecoder().decode(base64);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public void register(UserDto user) {
+        UserModel userModel = new UserModel(user);
+        UserModel userVef = userRepository.findByEmail(user.getEmail()).orElse(userModel);
+        if (userVef.getEmail() != userModel.getEmail()) {
+            throw new RuntimeException("User already exists");
+        } else {
+            userModel.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(userModel);
+        }
 
     }
 }

@@ -41,8 +41,7 @@ public class AuthService {
             return acessDto;
 
         } catch (BadCredentialsException e) {
-            // TODO: handle exception
+            throw new BadCredentialsException("Acesso negado");
         }
-        return new AcessDto("Acesso negado");
     }
 }

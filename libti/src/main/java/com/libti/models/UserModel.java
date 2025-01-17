@@ -3,7 +3,6 @@ package com.libti.models;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 
 import com.libti.dtos.UserDto;
 
@@ -12,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -33,7 +33,9 @@ public class UserModel {
     @NotNull
     private String password;
 
-    private byte[] profilePicture;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String profilePicture;
 
     public UserModel() {
     }
@@ -74,11 +76,11 @@ public class UserModel {
         this.password = password;
     }
 
-    public byte[] getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 

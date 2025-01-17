@@ -12,7 +12,7 @@ public class UserDto {
     private String name;
     private String email;
     private String password;
-    private byte[] profilePicture;
+    private String profilePicture;
 
     public UserDto(UserModel userModel) {
        BeanUtils.copyProperties(userModel, this);
@@ -45,11 +45,11 @@ public class UserDto {
         this.id = id;
     }
 
-    public byte[] getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 
